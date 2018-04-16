@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog index</title>
+</head>
+<body>
+{% if latest_archive_list %}
+<ul>
+    {% for archive in latest_archive_list %}
+        <li>
+            <a href="/core/archive/{{ archive.id }}">
+                {{ archive.title }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% else %}
+    <p> There is no archive here. </p>
+{% endif %}
+</body>
+</html>
