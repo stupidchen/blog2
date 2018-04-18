@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Blog index</title>
+    <title>Archives</title>
 </head>
 <body>
 <h1>
-    This is {{ username }}'s blog!
+    This is archive list!
 </h1>
 {% if archives %}
 <ul>
@@ -21,5 +21,15 @@
 {% else %}
     <p> There is no archive here. </p>
 {% endif %}
+<h2>
+    Submit your archive
+</h2>
+<form action="{% url 'core:archive' %}" method="post">
+    {% csrf_token %}
+    <input type="text" id="title" name="title" />
+    <br/>
+    <input type="text" id="content" name="content" />
+    <input type="submit" value="Submit"/>
+</form>
 </body>
 </html>

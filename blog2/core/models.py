@@ -15,7 +15,7 @@ class Comment(models.Model):
     id = models.CharField(max_length=32, primary_key=True)
     author = models.CharField(max_length=128)
     pubTime = models.DateTimeField()
-    context = models.TextField()
+    content = models.TextField()
 
     def __str__(self):
         return 'Comment ' + self.id + ' by ' + self.author
@@ -24,7 +24,7 @@ class Comment(models.Model):
 class Archive(models.Model):
     id = models.CharField(max_length=32, primary_key=True)
     title = models.TextField()
-    context = models.TextField()
+    content = models.TextField()
     author = models.CharField(max_length=128)
     pubTime = models.DateTimeField()
     editTime = models.DateTimeField()

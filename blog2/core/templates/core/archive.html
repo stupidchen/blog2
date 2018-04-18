@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Archive</title>
+</head>
+<body>
+<h2>
+    {{ archive.title }}
+</h2>
+<h5>
+    {{ archive.content }}
+</h5>
+
+<form action="{% url 'core:archive' %}" method="post">
+    {% csrf_token %}
+    <input type="text" id="title" name="title" />
+    <input type="text" id="content" name="content" />
+    <input type="submit" value="Submit"/>
+</form>
+</body>
+</html>
