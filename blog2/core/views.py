@@ -2,12 +2,13 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.core.exceptions import PermissionDenied
 from datetime import datetime
 from .models import Archive
+from .models import User
 from .utils import get_current_user
+from .utils import Tokens
 import uuid
-
-# Create your views here.
 
 def index(request, **kwargs):
     latest_archive = Archive.objects.order_by('-pubTime')[:5]
@@ -17,19 +18,56 @@ def index(request, **kwargs):
     }
     return render(request, 'core/index.html', context)
 
-def user(request, username):
-    pass
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    try:
+        match_user = User.objects.get(username=username, password=password)
+    except:
+        raise PermissionDenied
 
-def archive(request, id=None, limit=10):
+    token = uuid.uuid4()
+    Tokens.set_token(token, match_user.id)
+    context = {
+        'token': token,
+    }
+    # TODO: Login template
+    return render(request, 'core/login.html', context)
+
+def logout(request):
+    token = request.POST['token']
+    try:
+        uid = Tokens.get_uid(token)
+    except:
+        raise PermissionDenied
+
+    Tokens.remove_token(token)
+    return HttpResponseRedirect(reverse('core:archive'))
+
+# TODO: Implement
+def user(request, uid):
     if request.method == 'GET':
-        if id is None:
+        pass
+
+    if request.method == 'POST':
+        pass
+
+    if request.method == 'DELETE':
+        pass
+
+    if request.method == 'PUT':
+        pass
+
+def archive(request, aid=None, limit=10):
+    if request.method == 'GET':
+        if aid is None:
             latest_archives = Archive.objects.order_by('-pubTime')[:limit]
             context = {
                 'archives': latest_archives,
             }
             return render(request, 'core/archives.html', context)
         else:
-            archive = get_object_or_404(Archive, pk=id)
+            archive = get_object_or_404(Archive, pk=aid)
             context = {
                 'archive': archive,
             }
@@ -39,18 +77,18 @@ def archive(request, id=None, limit=10):
         title = request.POST['title']
         content = request.POST['content']
         author = get_current_user()
-        if id is None:
-            id = str(uuid.uuid4()).replace('-', '')
+        if aid is None:
+            aid = str(uuid.uuid4()).replace('-', '')
             pubTime = datetime.now()
             editTime = pubTime
-            new_archive = Archive(id=id, title=title, content=content, pubTime=pubTime, editTime=editTime, author=author)
+            new_archive = Archive(aid=aid, title=title, content=content, pubTime=pubTime, editTime=editTime, author=author)
             new_archive.save()
             return HttpResponseRedirect(reverse('core:archive'))
         else:
-            archive = get_object_or_404(Archive, pk=id)
+            archive = get_object_or_404(Archive, pk=aid)
             archive.title = title
             archive.content = content
             editTime = datetime.now()
             archive.editTime = editTime
             archive.save()
-            return HttpResponseRedirect(reverse('core:archive_id', args=(id,)))
+            return HttpResponseRedirect(reverse('core:archive_detail', args=(aid,)))
