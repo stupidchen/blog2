@@ -19,19 +19,23 @@ def index(request, **kwargs):
     return render(request, 'core/index.html', context)
 
 def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    try:
-        match_user = User.objects.get(username=username, password=password)
-    except:
-        raise PermissionDenied
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        try:
+            match_user = User.objects.get(username=username, password=password)
+        except:
+            raise PermissionDenied
 
-    token = uuid.uuid4()
-    Tokens.set_token(token, match_user.id)
-    context = {
-        'token': token,
-    }
-    return render(request, 'core/login.html', context)
+        token = uuid.uuid4()
+        Tokens.set_token(token, match_user.id)
+        context = {
+            'token': token,
+        }
+        return render(request, 'core/login.html', context)
+
+    if request.method == 'GET':
+        return render(request, 'core/login.html')
 
 def logout(request):
     token = request.POST['token']
