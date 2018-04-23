@@ -11,17 +11,17 @@ class Tokens:
         pass
 
     @classmethod
-    def reset(self):
-        self.__token_map__ = {}
+    def reset(cls):
+        cls.__token_map__ = {}
 
     @classmethod
-    def set_token(self, uid, token):
-        self.__token_map__[token] = uid
+    def set_token(cls, uid, token):
+        cls.__token_map__[token] = uid
 
     @classmethod
-    def get_uid(self, token):
-        return self.__token_map__[token]
+    def get_uid(cls, token):
+        return cls.__token_map__[token]
 
     @classmethod
-    def remove_token(self, token):
-        del self.__token_map__[token]
+    def remove_token(cls, token):
+        del cls.__token_map__[token]

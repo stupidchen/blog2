@@ -31,7 +31,6 @@ def login(request):
     context = {
         'token': token,
     }
-    # TODO: Login template
     return render(request, 'core/login.html', context)
 
 def logout(request):
@@ -45,9 +44,14 @@ def logout(request):
     return HttpResponseRedirect(reverse('core:archive'))
 
 # TODO: Implement
-def user(request, uid):
+def user(request, uid=None):
     if request.method == 'GET':
-        pass
+        users = User.objects.all()
+        context = {
+            users: users
+        }
+        # TODO: Users templates / New index
+        return render(request, 'core/users.html', context)
 
     if request.method == 'POST':
         pass
