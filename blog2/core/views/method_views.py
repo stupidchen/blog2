@@ -4,10 +4,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.exceptions import PermissionDenied
 from datetime import datetime
-from .models import Archive
-from .models import User
-from .utils import get_current_user
-from .utils import Tokens
+from blog2.core.models import Archive
+from blog2.core.models import User
+from blog2.core.utils import get_current_user
+from blog2.core.utils import Tokens
 import uuid
 
 def index(request, **kwargs):
