@@ -10,6 +10,7 @@ from blog2.core.utils import get_current_user
 from blog2.core.utils import Tokens
 import uuid
 
+
 def index(request, **kwargs):
     latest_archive = Archive.objects.order_by('-pubTime')[:5]
     context = {
@@ -17,6 +18,7 @@ def index(request, **kwargs):
         'username': kwargs.get('username'),
     }
     return render(request, 'core/index.html', context)
+
 
 def login(request):
     if request.method == 'POST':
@@ -37,6 +39,7 @@ def login(request):
     if request.method == 'GET':
         return render(request, 'core/login.html')
 
+
 def logout(request):
     token = request.POST['token']
     try:
@@ -46,6 +49,7 @@ def logout(request):
 
     Tokens.remove_token(token)
     return HttpResponseRedirect(reverse('core:archive'))
+
 
 # TODO: Implement
 def user(request, uid=None):
@@ -65,6 +69,7 @@ def user(request, uid=None):
 
     if request.method == 'PUT':
         pass
+
 
 def archive(request, aid=None, limit=10):
     if request.method == 'GET':
@@ -89,7 +94,8 @@ def archive(request, aid=None, limit=10):
             aid = str(uuid.uuid4()).replace('-', '')
             pubTime = datetime.now()
             editTime = pubTime
-            new_archive = Archive(aid=aid, title=title, content=content, pubTime=pubTime, editTime=editTime, author=author)
+            new_archive = Archive(aid=aid, title=title, content=content, pubTime=pubTime, editTime=editTime,
+                                  author=author)
             new_archive.save()
             return HttpResponseRedirect(reverse('core:archive'))
         else:

@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form action="{% url 'core:login' %}" method="post">
+<form action="{% url 'core:user' %}" method="post">
     {% csrf_token %}
     <label>username:</label><input type="text" id="username" name="username">
     <label>password:</label><input type="password" id="password" name="password">
