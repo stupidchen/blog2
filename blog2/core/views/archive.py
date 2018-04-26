@@ -1,7 +1,8 @@
 from django.views.generic import View
-from django.shortcuts import render
+from django.core import serializers
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.urls import reverse
 
 from datetime import datetime
@@ -13,9 +14,9 @@ from ..utils import get_current_user
 
 def get_url_param(path):
     seg = path.split('/')
-    id = seg[0]
+    id = seg[1]
     return {
-        id: id
+        'id': id
     }
 
 
@@ -32,24 +33,22 @@ class ArchiveView(View):
     def get(self, request, path=None):
         if path == '/':
             latest_archives = Archive.objects.order_by('-pubTime')
-            context = {
-                'data': {
-                    'archives': latest_archives.all(),
-                }
-            }
-            return render(request, 'core/archive_restful.html', context)
+            data = serializers.serialize('json', latest_archives)
+            return JsonResponse({
+                'data': data
+            })
         else:
-            archive = get_object_or_404(Archive, pk=get_url_param(path).id)
-            context = {
-                'archive': archive,
-            }
-            return render(request, 'core/archive_restful.html', context)
+            archive = get_object_or_404(Archive, pk=get_url_param(path)['id'])
+            data = serializers.serialize('json', archive)
+            return JsonResponse({
+                'data': data
+            })
 
     def post(self, request, path=None):
         title = request.POST['title']
         content = request.POST['content']
         author = get_current_user()
-        id = get_url_param(path).id
+        id = get_url_param(path)['id']
         if id is None:
             aid = str(uuid.uuid4()).replace('-', '')
             pubTime = datetime.now()
