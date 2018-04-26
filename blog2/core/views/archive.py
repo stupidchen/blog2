@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from datetime import datetime
 import uuid
+import json
 
 from ..models import Archive
 from ..utils import get_current_user
@@ -32,14 +33,14 @@ def get_query_param(path):
 class ArchiveView(View):
     def get(self, request, path=None):
         if path == '/':
-            latest_archives = Archive.objects.order_by('-pubTime')
-            data = serializers.serialize('json', latest_archives)
+            archives = Archive.objects.order_by('-pubTime')
+            data = [archive.as_dict() for archive in archives]
             return JsonResponse({
                 'data': data
             })
         else:
-            archive = get_object_or_404(Archive, pk=get_url_param(path)['id'])
-            data = serializers.serialize('json', archive)
+            archive = Archive.objects.get(pk=get_url_param(path)['id'])
+            data = archive.as_dict()
             return JsonResponse({
                 'data': data
             })
