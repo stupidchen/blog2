@@ -1,11 +1,13 @@
 from django.db import models
 
+
 class DictMixin(object):
     default_columns = []
 
     def as_dict(self, columns=None):
         if not columns:
             columns = self.default_columns
+
         ret = {}
         for column in columns:
             try:
@@ -14,6 +16,18 @@ class DictMixin(object):
             except:
                 pass
         return ret
+
+    @classmethod
+    def from_dict(cls, dict, columns=None):
+        if not columns:
+            columns = cls.default_columns
+
+        kwargs = {}
+        for k in columns:
+            if k in dict:
+                kwargs[k] = dict[k]
+        return cls(**kwargs)
+
 
 # Create your models here.
 class User(models.Model, DictMixin):
@@ -26,6 +40,7 @@ class User(models.Model, DictMixin):
 
     def __str__(self):
         return 'User ' + self.id + ' with name ' + self.username
+
 
 class Comment(models.Model, DictMixin):
     id = models.CharField(max_length=32, primary_key=True)
@@ -49,6 +64,7 @@ class Archive(models.Model, DictMixin):
 
     def __str__(self):
         return 'Archive ' + self.id + 'by ' + self.author
+
 
 class Archive_Comment_Relation(models.Model):
     archive_id = models.ForeignKey(Archive, on_delete=models.CASCADE)
