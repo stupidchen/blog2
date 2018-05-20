@@ -15,7 +15,6 @@ def get_url_param(path):
     }
 
 
-# TODO
 class UserView(View):
     def get(self, request, path):
         if path == '/':
@@ -69,7 +68,6 @@ class UserView(View):
         return JsonResponse({
             'error': Error.INVALID_PATH,
         })
-
 
     def put(self, request, path):
         pass

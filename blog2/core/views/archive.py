@@ -1,5 +1,4 @@
 from django.views.generic import View
-from django.core import serializers
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -7,7 +6,6 @@ from django.urls import reverse
 
 from datetime import datetime
 import uuid
-import json
 
 from ..models import Archive
 from ..utils import get_current_user

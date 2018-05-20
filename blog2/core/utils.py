@@ -1,7 +1,7 @@
-
 # TODO
 def get_current_user():
     return 'root'
+
 
 # TODO: Thread safety
 class Tokens(object):

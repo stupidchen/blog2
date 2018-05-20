@@ -51,14 +51,12 @@ def logout(request):
     return HttpResponseRedirect(reverse('core:archive'))
 
 
-# DeprecatedTODO: Implement
 def user(request, uid=None):
     if request.method == 'GET':
         users = User.objects.all()
         context = {
             users: users
         }
-        # DeprecatedTODO: Users templates / New index
         return render(request, 'core/users.html', context)
 
     if request.method == 'POST':

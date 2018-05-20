@@ -66,6 +66,6 @@ class Archive(models.Model, DictMixin):
         return 'Archive ' + self.id + 'by ' + self.author
 
 
-class Archive_Comment_Relation(models.Model):
+class ArchiveCommentRelation(models.Model):
     archive_id = models.ForeignKey(Archive, on_delete=models.CASCADE)
     comment_id = models.ForeignKey(Comment, on_delete=models.CASCADE)
