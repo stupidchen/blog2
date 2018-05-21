@@ -32,8 +32,9 @@ class UserView(View):
         })
 
     def post(self, request, path):
+        data = json.loads(request.POST.get('data'))
+
         if path == '/login':
-            data = json.loads(request.POST['data'])
 
             username = data['username']
             password = data['password']
@@ -52,7 +53,7 @@ class UserView(View):
             })
 
         if path == '/logout':
-            token = request.POST['token']
+            token = request.POST.get('token')
             try:
                 uid = Tokens.get_uid(token)
             except:
@@ -61,6 +62,22 @@ class UserView(View):
                 })
 
             Tokens.remove_token(token)
+            return JsonResponse({
+                'error': Error.NO_ERROR,
+            })
+
+        if path == '/register':
+            username = data.get('username')
+            email = data.get('email')
+            password = data.get('password')
+            information = data.get('information')
+            if username is None or password is None:
+                return JsonResponse({
+                    'error': Error.USERNAME_OR_PASSWORD_CANNOT_BE_NULL
+                })
+            id = str(uuid.uuid4()).replace('-', '')
+            new_user = User(id=id, username=username, email=email, password=password, information=information)
+            new_user.save()
             return JsonResponse({
                 'error': Error.NO_ERROR,
             })

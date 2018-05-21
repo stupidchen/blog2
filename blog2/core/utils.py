@@ -40,6 +40,7 @@ class Error(object):
     TOKEN_INVALID = 1
     USERNAME_OR_PASSWORD_INCORRECT = 2
     INVALID_PATH = 3
+    USERNAME_OR_PASSWORD_CANNOT_BE_NULL = 4
 
     def get_error_message(self, code):
         ret = 'Unknown error'

@@ -44,8 +44,8 @@ class ArchiveView(View):
             })
 
     def post(self, request, path=None):
-        title = request.POST['title']
-        content = request.POST['content']
+        title = request.POST.get('title')
+        content = request.POST.get('content')
         author = get_current_user()
         id = get_url_param(path)['id']
         if id is None:
