@@ -1,14 +1,14 @@
+from datetime import datetime
+import uuid
+
 from django.views.generic import View
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.urls import reverse
 
-from datetime import datetime
-import uuid
-
 from ..models import Archive
-from ..utils import get_current_user
+from ..utils import get_current_user, Error
 
 
 def get_url_param(path):
@@ -34,12 +34,14 @@ class ArchiveView(View):
             archives = Archive.objects.order_by('-pubTime')
             data = [archive.as_dict() for archive in archives]
             return JsonResponse({
+                'error': Error.NO_ERROR,
                 'data': data
             })
         else:
             archive = Archive.objects.get(pk=get_url_param(path)['id'])
             data = archive.as_dict()
             return JsonResponse({
+                'error': Error.NO_ERROR,
                 'data': data
             })
 
@@ -55,7 +57,9 @@ class ArchiveView(View):
             new_archive = Archive(aid=aid, title=title, content=content, pubTime=pubTime, editTime=editTime,
                                   author=author)
             new_archive.save()
-            return HttpResponseRedirect(reverse('core:archive'))
+            return JsonResponse({
+                'error': Error.NO_ERROR,
+            })
         else:
             archive = get_object_or_404(Archive, pk=id)
             archive.title = title

@@ -1,10 +1,12 @@
+import json
+import uuid
+
 from django.http.response import JsonResponse
 from django.views.generic import View
+
 from ..models import User
 from ..utils import Tokens
 from ..utils import Error
-import json
-import uuid
 
 
 def get_url_param(path):
