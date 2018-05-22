@@ -1,14 +1,16 @@
+import uuid
+from datetime import datetime
+
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.exceptions import PermissionDenied
-from datetime import datetime
+
 from blog2.core.models import Archive
 from blog2.core.models import User
 from blog2.core.utils import get_current_user
 from blog2.core.utils import Tokens
-import uuid
 
 
 def index(request, **kwargs):
