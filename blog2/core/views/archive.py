@@ -29,7 +29,8 @@ def get_query_param(path):
 
 
 class ArchiveView(View):
-    def get(self, request, path=None):
+    @staticmethod
+    def get(request, path=None):
         if path == '/':
             archives = Archive.objects.order_by('-pubTime')
             data = [archive.as_dict() for archive in archives]
@@ -45,7 +46,8 @@ class ArchiveView(View):
                 'data': data
             })
 
-    def post(self, request, path=None):
+    @staticmethod
+    def post(request, path=None):
         title = request.POST.get('title')
         content = request.POST.get('content')
         author = get_current_user()
@@ -53,8 +55,8 @@ class ArchiveView(View):
         if id is None:
             aid = str(uuid.uuid4()).replace('-', '')
             pubTime = datetime.now()
-            editTime = pubTime
-            new_archive = Archive(aid=aid, title=title, content=content, pubTime=pubTime, editTime=editTime,
+            edit_time = pubTime
+            new_archive = Archive(aid=aid, title=title, content=content, pubTime=pubTime, editTime=edit_time,
                                   author=author)
             new_archive.save()
             return JsonResponse({
@@ -64,8 +66,8 @@ class ArchiveView(View):
             archive = get_object_or_404(Archive, pk=id)
             archive.title = title
             archive.content = content
-            editTime = datetime.now()
-            archive.editTime = editTime
+            edit_time = datetime.now()
+            archive.editTime = edit_time
             archive.save()
             return HttpResponseRedirect(reverse('core:archive', args=(id,)))
         pass

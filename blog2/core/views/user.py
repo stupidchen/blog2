@@ -18,7 +18,8 @@ def get_url_param(path):
 
 
 class UserView(View):
-    def get(self, request, path):
+    @staticmethod
+    def get(request, path):
         if path == '/':
             users = User.objects.all()
             data = [user.as_dict() for user in users]
@@ -33,7 +34,8 @@ class UserView(View):
             'data': data,
         })
 
-    def post(self, request, path):
+    @staticmethod
+    def post(request, path):
         data = json.loads(request.POST.get('data'))
 
         if path == '/login':

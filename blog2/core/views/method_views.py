@@ -46,7 +46,7 @@ def logout(request):
     token = request.POST['token']
     try:
         uid = Tokens.get_uid(token)
-    except:
+    except Exception:
         raise PermissionDenied
 
     Tokens.remove_token(token)
